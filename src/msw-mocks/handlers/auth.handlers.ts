@@ -2,7 +2,7 @@ import { rest } from 'msw'
 import { users } from '../data/users.data'
 
 export const authHandlers = [
-  rest.post('/api/auth/login', async (req, res, ctx) => {
+  rest.post('http://localhost/api/auth/login', async (req, res, ctx) => {
     const { email, password } = await req.json()
     const user = users.find(u => u.email === email && u.password === password)
 
@@ -11,7 +11,6 @@ export const authHandlers = [
     }
 
     return res(
-      ctx.delay(500),
       ctx.json({
         token: String(user.id),
         user: { id: user.id, email: user.email, role: user.role },
