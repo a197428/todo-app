@@ -1,6 +1,16 @@
+<script setup lang="ts">
+import { onMounted } from 'vue'
+
+const { initAuth } = useAuth()
+
+onMounted(() => {
+  initAuth()
+})
+</script>
+
 <template>
   <div>
     <NuxtRouteAnnouncer />
-    <NuxtWelcome />
+    <NuxtPage />
   </div>
 </template>

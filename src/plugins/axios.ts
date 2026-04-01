@@ -19,6 +19,7 @@ export default defineNuxtPlugin(() => {
 		response => response,
 		error => {
 			if (error.response?.status === 401) {
+				localStorage.removeItem('token');
 				navigateTo('/login'); // Редирект на страницу входа
 			}
 			return Promise.reject(error);

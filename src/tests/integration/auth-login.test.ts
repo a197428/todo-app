@@ -56,7 +56,7 @@ describe('POST /api/auth/login — конкретные примеры', () => {
 test.prop([fc.integer({ min: 0, max: 1 })])(
   'Property 3: валидные credentials → 200 с корректным ответом',
   async (index) => {
-    const user = users[index]
+    const user = users[index]!
     const res = await postLogin({ email: user.email, password: user.password })
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -64,8 +64,7 @@ test.prop([fc.integer({ min: 0, max: 1 })])(
     expect(body.user.id).toBe(user.id)
     expect(body.user.email).toBe(user.email)
     expect(body.user.role).toBe(user.role)
-  },
-  { timeout: 120_000 }
+  }
 )
 
 // ─── 5.3 Property 4: Невалидные credentials → 401 ────────────────────────────
