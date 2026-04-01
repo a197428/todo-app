@@ -1,75 +1,98 @@
-# Nuxt Minimal Starter
+# ToDo App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Тестовое задание — приложение для управления задачами на Nuxt 3 с авторизацией, CRUD-операциями, фильтрацией и сортировкой.
 
-## Setup
+## Стек
 
-Make sure to install dependencies:
+- **Nuxt 3** (SSR отключён, SPA)
+- **TypeScript** (strict mode)
+- **Tailwind CSS**
+- **MSW v1** — мок-бэкенд прямо в браузере
+- **Vitest** + **@fast-check/vitest** — unit, integration и property-based тесты
+- **Axios** — HTTP-клиент с интерцепторами
+
+## Быстрый старт
 
 ```bash
-# npm
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Открыть: [http://localhost:3000](http://localhost:3000)
 
-Build the application for production:
+## Тестовые аккаунты
+
+| Email | Пароль | Роль |
+|-------|--------|------|
+| admin@test.com | 123456 | admin — может редактировать и удалять любые задачи |
+| user@test.com | 123456 | user — только свои задачи |
+
+## Функциональность
+
+### Авторизация
+- Форма входа с валидацией email/password
+- JWT-токен хранится в `localStorage`
+- Автоматический редирект на `/login` при 401
+- Защита маршрутов через Nuxt middleware
+
+### Управление задачами
+- Просмотр списка с индикатором загрузки
+- Создание задачи (название, описание, дедлайн, статус)
+- Редактирование через модальное окно
+- Удаление с подтверждением
+- Права: редактировать/удалять может только создатель задачи или admin
+
+### Фильтрация и поиск
+- Фильтры: Все / Активные / Выполненные / Просроченные
+- Сортировка: по умолчанию / по дате (возр./убыв.) / по статусу
+- Поиск по названию с debounce 300ms
+- Пагинация (10 задач на страницу)
+
+## Тесты
 
 ```bash
-# npm
-npm run build
+# Запустить все тесты
+npm run test
 
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# Режим наблюдения
+npm run test:watch
 ```
 
-Locally preview production build:
+Покрытие: 81 тест в 7 файлах — unit, integration и property-based тесты для утилит, composables и MSW-обработчиков.
 
-```bash
-# npm
-npm run preview
+## Структура проекта
 
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+src/
+├── composables/
+│   ├── useAuth.ts          # Авторизация, стор пользователя
+│   ├── useTasks.ts         # CRUD задач
+│   └── useTaskFilters.ts   # Фильтрация, сортировка, поиск, пагинация
+├── components/
+│   ├── TaskCard.vue
+│   ├── TaskForm.vue
+│   ├── TaskModal.vue
+│   ├── TaskFilter.vue
+│   ├── TaskSearch.vue
+│   ├── TaskPagination.vue
+│   └── ConfirmDialog.vue
+├── pages/
+│   ├── login.vue
+│   └── index.vue
+├── middleware/
+│   └── auth.global.ts      # Защита маршрутов
+├── msw-mocks/              # Мок-бэкенд (MSW)
+│   ├── handlers/
+│   │   ├── auth.handlers.ts
+│   │   └── tasks.handlers.ts
+│   └── data/
+│       ├── users.data.ts
+│       └── tasks.data.ts
+├── utils/
+│   ├── auth.ts             # Валидация формы
+│   └── tasks.ts            # filterTasks, sortTasks, searchTasks
+└── tests/
+    ├── setup.ts
+    ├── unit/
+    └── integration/
+```
