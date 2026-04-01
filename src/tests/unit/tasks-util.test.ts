@@ -26,14 +26,18 @@ describe('filterTasks', () => {
     expect(filterTasks(tasks, 'all')).toHaveLength(2)
   })
 
-  it('active — returns only incomplete tasks', () => {
+  it('active — returns only incomplete non-overdue tasks', () => {
+    vi.useFakeTimers()
+    vi.setSystemTime(new Date('2026-03-01'))
     const tasks = [
-      makeTask({ Id: 1, IsCompleted: false }),
-      makeTask({ Id: 2, IsCompleted: true }),
+      makeTask({ Id: 1, IsCompleted: false, DueDate: '2026-03-02' }), // active
+      makeTask({ Id: 2, IsCompleted: true }),                          // completed
+      makeTask({ Id: 3, IsCompleted: false, DueDate: '2026-02-28' }), // overdue — excluded
     ]
     const result = filterTasks(tasks, 'active')
     expect(result).toHaveLength(1)
-    expect(result[0].Id).toBe(1)
+    expect(result[0]!.Id).toBe(1)
+    vi.useRealTimers()
   })
 
   it('completed — returns only completed tasks', () => {
@@ -43,7 +47,7 @@ describe('filterTasks', () => {
     ]
     const result = filterTasks(tasks, 'completed')
     expect(result).toHaveLength(1)
-    expect(result[0].Id).toBe(2)
+    expect(result[0]!.Id).toBe(2)
   })
 
   it('overdue — returns incomplete tasks with DueDate < today', () => {
@@ -51,14 +55,14 @@ describe('filterTasks', () => {
     vi.setSystemTime(new Date('2026-03-01'))
 
     const tasks = [
-      makeTask({ Id: 1, IsCompleted: false, DueDate: '2026-02-28' }), // overdue
-      makeTask({ Id: 2, IsCompleted: false, DueDate: '2026-03-01' }), // today — not overdue
-      makeTask({ Id: 3, IsCompleted: false, DueDate: '2026-03-02' }), // future
-      makeTask({ Id: 4, IsCompleted: true, DueDate: '2026-02-01' }),  // completed — excluded
+      makeTask({ Id: 1, IsCompleted: false, DueDate: '2026-02-28' }),
+      makeTask({ Id: 2, IsCompleted: false, DueDate: '2026-03-01' }),
+      makeTask({ Id: 3, IsCompleted: false, DueDate: '2026-03-02' }),
+      makeTask({ Id: 4, IsCompleted: true, DueDate: '2026-02-01' }),
     ]
     const result = filterTasks(tasks, 'overdue')
     expect(result).toHaveLength(1)
-    expect(result[0].Id).toBe(1)
+    expect(result[0]!.Id).toBe(1)
 
     vi.useRealTimers()
   })
@@ -160,6 +164,6 @@ describe('searchTasks', () => {
   it('partial match works', () => {
     const result = searchTasks(tasks, 'foo')
     expect(result).toHaveLength(1)
-    expect(result[0].Id).toBe(2)
+    expect(result[0]!.Id).toBe(2)
   })
 })

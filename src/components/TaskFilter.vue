@@ -42,7 +42,7 @@ const currentSort = ref<SortOption>('default')
 const filterOptions: { value: FilterOption; label: string }[] = [
   { value: 'all', label: 'Все' },
   { value: 'active', label: 'Активные' },
-  { value: 'completed', label: 'Готовые' },
+  { value: 'completed', label: 'Выполненные' },
   { value: 'overdue', label: 'Просроченные' },
 ]
 

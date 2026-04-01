@@ -9,7 +9,7 @@ export function filterTasks(tasks: Task[], filter: FilterOption): Task[] {
     case 'all':
       return tasks
     case 'active':
-      return tasks.filter(t => !t.IsCompleted)
+      return tasks.filter(t => !t.IsCompleted && !(t.DueDate && t.DueDate < today))
     case 'completed':
       return tasks.filter(t => t.IsCompleted)
     case 'overdue':

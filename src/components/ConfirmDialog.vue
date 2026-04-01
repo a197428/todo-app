@@ -26,6 +26,7 @@
         <button
           type="button"
           :disabled="loading"
+          data-testid="confirm-delete-btn"
           class="px-5 py-2 text-sm font-semibold text-white bg-red-600 rounded-xl hover:bg-red-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center gap-2"
           @click="emit('confirm')"
         >
