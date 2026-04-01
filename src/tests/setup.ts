@@ -1,8 +1,9 @@
 import { setupServer } from 'msw/node'
-import { authHandlers } from '../msw-mocks/handlers/auth.handlers'
+import { authHandlersNode } from '../msw-mocks/handlers/auth.handlers'
+import { taskHandlersNode } from '../msw-mocks/handlers/tasks.handlers'
 import { beforeAll, afterEach, afterAll, vi } from 'vitest'
 
-export const server = setupServer(...authHandlers)
+export const server = setupServer(...authHandlersNode, ...taskHandlersNode)
 
 beforeAll(() => server.listen({ onUnhandledRequest: 'error' }))
 afterEach(() => server.resetHandlers())

@@ -223,7 +223,7 @@ describe('auth middleware — property tests', () => {
   test.prop([fc.webPath().filter(p => p !== '/login')])(
     'P9: неаутентифицированный пользователь редиректится на /login для любого маршрута кроме /login',
     async (path) => {
-      const { default: middleware } = await import('../../middleware/auth')
+      const { default: middleware } = await import('../../middleware/auth.global')
       const handler = (middleware as unknown as Function)
       const to = { path }
       handler(to, {})
