@@ -1,14 +1,24 @@
+<script setup lang="ts">
+import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
+
+interface Props {
+  currentPage: number
+  totalPages: number
+}
+
+defineProps<Props>()
+const emit = defineEmits<{ 'update:page': [value: number] }>()
+</script>
+
 <template>
-  <div v-if="totalPages > 1" class="flex items-center justify-center gap-1">
+  <div v-if="totalPages > 1" class="flex items-center justify-center gap-1.5">
     <button
       type="button"
       :disabled="currentPage <= 1"
       class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
       @click="emit('update:page', currentPage - 1)"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-      </svg>
+      <ChevronLeft class="w-4 h-4" />
     </button>
 
     <button
@@ -30,19 +40,7 @@
       class="p-2 rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
       @click="emit('update:page', currentPage + 1)"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-      </svg>
+      <ChevronRight class="w-4 h-4" />
     </button>
   </div>
 </template>
-
-<script setup lang="ts">
-interface Props {
-  currentPage: number
-  totalPages: number
-}
-
-defineProps<Props>()
-const emit = defineEmits<{ 'update:page': [value: number] }>()
-</script>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { FileText, AlignLeft, CalendarDays, CheckCircle2, AlertCircle, Loader2, X } from 'lucide-vue-next'
 import type { CreateTaskPayload } from '../composables/useTasks'
 
 interface Props {
@@ -38,25 +39,32 @@ function handleSubmit() {
 <template>
   <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
     <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1.5" for="task-title">
+      <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5" for="task-title">
+        <FileText class="w-4 h-4 text-slate-500" />
         Название <span class="text-red-500">*</span>
       </label>
-      <input
-        id="task-title"
-        v-model="title"
-        type="text"
-        placeholder="Что нужно сделать?"
-        class="w-full rounded-xl border px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-        :class="titleError ? 'border-red-400 bg-red-50' : 'border-slate-200 hover:border-slate-300'"
-      />
+      <div class="relative">
+        <FileText class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
+        <input
+          id="task-title"
+          v-model="title"
+          type="text"
+          placeholder="Что нужно сделать?"
+          class="w-full rounded-xl border pl-9 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+          :class="titleError ? 'border-red-400 bg-red-50' : 'border-slate-200 hover:border-slate-300'"
+        />
+      </div>
       <p v-if="titleError" class="mt-1.5 text-xs text-red-500 flex items-center gap-1">
-        <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>
+        <AlertCircle class="w-3.5 h-3.5" />
         {{ titleError }}
       </p>
     </div>
 
     <div>
-      <label class="block text-sm font-medium text-slate-700 mb-1.5" for="task-description">Описание</label>
+      <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5" for="task-description">
+        <AlignLeft class="w-4 h-4 text-slate-500" />
+        Описание
+      </label>
       <textarea
         id="task-description"
         v-model="description"
@@ -68,7 +76,10 @@ function handleSubmit() {
 
     <div class="grid grid-cols-2 gap-3">
       <div>
-        <label class="block text-sm font-medium text-slate-700 mb-1.5" for="task-due-date">Срок</label>
+        <label class="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5" for="task-due-date">
+          <CalendarDays class="w-4 h-4 text-slate-500" />
+          Срок
+        </label>
         <input
           id="task-due-date"
           v-model="dueDate"
@@ -83,18 +94,20 @@ function handleSubmit() {
             <div class="w-10 h-6 bg-slate-200 rounded-full peer-checked:bg-indigo-600 transition-colors"></div>
             <div class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform peer-checked:translate-x-4"></div>
           </div>
+          <CheckCircle2 class="w-4 h-4 text-slate-500" />
           <span class="text-sm text-slate-700">Выполнено</span>
         </label>
       </div>
     </div>
 
     <div v-if="props.error" class="flex items-center gap-2 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
-      <svg class="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+      <AlertCircle class="w-4 h-4 shrink-0" />
       {{ props.error }}
     </div>
 
     <div class="flex gap-2 justify-end pt-1">
-      <button type="button" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-100 transition-colors" @click="emit('cancel')">
+      <button type="button" class="px-4 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-100 transition-colors flex items-center gap-1.5" @click="emit('cancel')">
+        <X class="w-4 h-4" />
         Отмена
       </button>
       <button
@@ -102,10 +115,7 @@ function handleSubmit() {
         :disabled="props.loading"
         class="px-5 py-2 text-sm font-semibold text-white bg-indigo-600 rounded-xl hover:bg-indigo-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed transition-all flex items-center gap-2"
       >
-        <svg v-if="props.loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-        </svg>
+        <Loader2 v-if="props.loading" class="w-4 h-4 animate-spin" />
         {{ props.loading ? 'Сохранение...' : 'Создать' }}
       </button>
     </div>

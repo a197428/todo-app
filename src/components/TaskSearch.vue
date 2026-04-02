@@ -1,8 +1,18 @@
+<script setup lang="ts">
+import { Search } from 'lucide-vue-next'
+
+interface Props {
+  value?: string
+}
+
+withDefaults(defineProps<Props>(), { value: '' })
+
+const emit = defineEmits<{ 'update:search': [value: string] }>()
+</script>
+
 <template>
   <div class="relative">
-    <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-    </svg>
+    <Search class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
     <input
       type="text"
       :value="value"
@@ -12,13 +22,3 @@
     />
   </div>
 </template>
-
-<script setup lang="ts">
-interface Props {
-  value?: string
-}
-
-withDefaults(defineProps<Props>(), { value: '' })
-
-const emit = defineEmits<{ 'update:search': [value: string] }>()
-</script>

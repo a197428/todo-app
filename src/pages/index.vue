@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { ClipboardList, Plus, LogOut, Loader2, AlertCircle, ClipboardCheck } from 'lucide-vue-next'
 import { useAuth } from '../composables/useAuth'
 import { useTasks } from '../composables/useTasks'
 import { useTaskFilters } from '../composables/useTaskFilters'
@@ -83,9 +84,7 @@ async function handleDelete() {
     <header class="bg-white border-b border-slate-200 px-6 py-3.5 flex items-center justify-between sticky top-0 z-10">
       <div class="flex items-center gap-2.5">
         <div class="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center">
-          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-          </svg>
+          <ClipboardList class="w-4 h-4 text-white" />
         </div>
         <span class="text-sm font-semibold text-slate-900">ToDo App</span>
       </div>
@@ -98,9 +97,7 @@ async function handleDelete() {
           <span v-if="isAdmin" class="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700">admin</span>
         </div>
         <button class="text-sm text-slate-500 hover:text-slate-800 flex items-center gap-1.5 px-3 py-1.5 rounded-lg hover:bg-slate-100 transition-colors" @click="logout">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
-          </svg>
+          <LogOut class="w-4 h-4" />
           Выйти
         </button>
       </div>
@@ -113,9 +110,7 @@ async function handleDelete() {
           class="inline-flex items-center gap-2 self-start rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 active:scale-[0.98] transition-all shadow-sm"
           @click="showCreateForm = true"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-          </svg>
+          <Plus class="w-4 h-4" />
           Новая задача
         </button>
         <div class="sm:w-64">
@@ -127,18 +122,13 @@ async function handleDelete() {
 
       <!-- Loading -->
       <div v-if="isLoading" class="flex flex-col items-center justify-center py-20 gap-3">
-        <svg class="w-8 h-8 text-indigo-500 animate-spin" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
-        </svg>
+        <Loader2 class="w-8 h-8 text-indigo-500 animate-spin" />
         <span class="text-sm text-slate-400">Загрузка задач...</span>
       </div>
 
       <!-- Error -->
       <div v-else-if="error" class="flex items-center gap-3 rounded-2xl bg-red-50 border border-red-200 px-5 py-4 text-sm text-red-700">
-        <svg class="w-5 h-5 shrink-0 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-        </svg>
+        <AlertCircle class="w-5 h-5 shrink-0 text-red-500" />
         <div>
           <p class="font-medium">Ошибка загрузки</p>
           <p class="text-red-600 mt-0.5">{{ error }}</p>
@@ -148,9 +138,7 @@ async function handleDelete() {
       <!-- Empty state -->
       <div v-else-if="paginatedTasks.length === 0" class="flex flex-col items-center justify-center py-20 gap-3 text-center">
         <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center">
-          <svg class="w-7 h-7 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
-          </svg>
+          <ClipboardCheck class="w-7 h-7 text-slate-400" />
         </div>
         <p class="text-sm font-medium text-slate-600">Задач нет</p>
         <p class="text-xs text-slate-400">Создайте первую задачу или измените фильтр</p>
